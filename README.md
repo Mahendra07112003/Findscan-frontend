@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+FindScan – Bollinger Bands (KLineCharts)
 
-## Getting Started
+Goal: Production-ready Bollinger Bands indicator using KLineCharts only, with TradingView-like Inputs/Style settings.
 
-First, run the development server:
+Getting Started
+
+1) Install deps
+
+```bash
+npm install
+```
+
+2) Run dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. Use “Add Indicator/Remove Indicator” and “Settings” to interact.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Tech
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js 15 + React 19 + TypeScript + Tailwind v4
+- KLineCharts version: `^` latest installed (see package.json)
 
-## Learn More
+Data
 
-To learn more about Next.js, take a look at the following resources:
+- Demo OHLCV at `public/data/ohlcv.json` (app auto-extends to 200+ candles if short)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Indicator Formulas
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Basis (middle): SMA(close, length)
+- StdDev: population standard deviation of last `length` closes
+- Upper: Basis + (StdDev multiplier × StdDev)
+- Lower: Basis − (StdDev multiplier × StdDev)
+- Offset: basis/upper/lower shifted by `offset` bars (positive shifts forward)
 
-## Deploy on Vercel
+UI/UX
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Settings modal with Inputs and Style tabs
+- Style supports visibility/color/width/style per line and background fill opacity
+- Crosshair tooltip shows Basis/Upper/Lower for hovered candle
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Structure
+
+- `components/Chart.tsx`: initializes KLineCharts, registers custom indicator, draws lines & fill
+- `components/BollingerSettings.tsx`: settings UI
+- `lib/indicators/bollinger.ts`: pure math to compute bands
+- `lib/types.ts`: shared types and defaults
+
+Screenshots/GIF
+
+- Add two screenshots or a short GIF here capturing the chart with settings open (placeholder).
+
+Notes
+
+- Only KLineCharts is used for charting. SMA supported for the basis as required.
