@@ -47,9 +47,18 @@ function ensureRegisterIndicator() {
       const name = "BOLL";
       const calcParamsText = `(${indicator.calcParams[0]}, ${indicator.calcParams[1]}, ${indicator.calcParams[2]})`;
       const legends = [
-        { color: "#9ca3af", text: `Basis: ${res.basis ?? "-"}` },
-        { color: "#22d3ee", text: `Upper: ${res.upper ?? "-"}` },
-        { color: "#22d3ee", text: `Lower: ${res.lower ?? "-"}` },
+        {
+          title: { text: "Basis:", color: "#9ca3af" },
+          value: { text: `${res.basis ?? "-"}`, color: "#9ca3af" },
+        },
+        {
+          title: { text: "Upper:", color: "#22d3ee" },
+          value: { text: `${res.upper ?? "-"}`, color: "#22d3ee" },
+        },
+        {
+          title: { text: "Lower:", color: "#22d3ee" },
+          value: { text: `${res.lower ?? "-"}`, color: "#22d3ee" },
+        },
       ];
       return { name, calcParamsText, features: [], legends } as unknown as ReturnType<NonNullable<typeof indicator.createTooltipDataSource>>;
     },
